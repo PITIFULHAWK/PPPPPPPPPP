@@ -29,11 +29,8 @@ jobs:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USERNAME}}
           key: ${{secrets.SSH_KEY}}
-          envs:
-            DATABASE_URL: ${{secrets.DATABASE_URL}}
-            NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
           script: |
             sudo docker pull pitifulhawk/paytm_clone_test:latest
             sudo docker stop paytm_test || true
             sudo docker rm paytm_test || true
-            sudo docker run -e DATABASE_URL -e NEXTAUTH_URL -d --name paytm_test -p 3005:3000 pitifulhawk/paytm_clone_test:latest
+            sudo docker run -e DATABASE_URL=${{secrets.DATABASE_URL}} -e NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}} -d --name paytm_test -p 3005:3000 pitifulhawk/paytm_clone_test:latest
