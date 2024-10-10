@@ -23,3 +23,14 @@ jobs:
           tags: pitifulhawk/paytm_clone_test:latest
       - name: Verify Pushed Image
         run: docker pull pitifulhawk/paytm_clone_test:latest
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            sudo docker pull pitifulhawk/paytm_clone_test:latest
+            sudo docker stop paytm_test || true
+            sudo docker rm paytm_test || true
+            sudo docker run -d --name paytm_text -p 3005:3000 pitifulhawk/paytm_clone_test:latest
